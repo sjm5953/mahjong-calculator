@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mahjong Calculator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
+      rel="stylesheet"
+    />
+
+    <link href="src/output.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/4.0.0/uicons-bold-rounded/css/uicons-bold-rounded.css"
+    />
+  </head>
+
+  <body
+    class="font-gsf h-screen min-h-0 bg-neutral-900 flex justify-center items-center p-8"
+  >
+    <div
+      id="appCard"
+      class="bg-base-100 rounded-xl h-full w-full max-w-md md:max-w-lg px-8 py-10 flex flex-col items-center overflow-y-auto"
+    >
+      <h1 class="uppercase font-black leading-[1] text-center text-3xl">
+        Mahjong<br />Calculator
+      </h1>
+
+      <div class="w-full mt-8 space-y-4">
+        <!-- Your Wind -->
+        <div class="flex flex-col w-full">
+          <label class="font-black uppercase text-lg mb-2">Your Wind</label>
+          <select id="yourWind" class="select select-bordered w-full">
+            <option value="">Select your wind</option>
+            <option value="east">East Wind</option>
+            <option value="south">South Wind</option>
+            <option value="west">West Wind</option>
+            <option value="north">North Wind</option>
+          </select>
+        </div>
+
+        <!-- Mahjong Checkbox -->
+        <label
+          class="flex items-start gap-3 bg-neutral-200 rounded-lg p-4 shadow-md cursor-pointer"
+        >
+          <input
+            id="mahjongCheckbox"
+            type="checkbox"
+            class="checkbox checkbox-neutral mt-1"
+          />
+
+          <div>
+            <p class="font-black uppercase leading-tight">Mahjong</p>
+            <p class="text-sm opacity-70">You had the winning hand</p>
+          </div>
+        </label>
+        <!-- Winning Tile Options -->
+        <div
+          id="winningTileSection"
+          class="hidden bg-neutral-200 rounded-lg p-4 shadow-md"
+        >
+          <h2 class="font-black uppercase text-lg">Winning Tile</h2>
+
+          <div class="mt-4 flex flex-col gap-3">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input
+                id="drawnFromWall"
+                type="checkbox"
+                class="checkbox checkbox-neutral"
+              />
+              <span class="font-medium">Drawn from wall</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input
+                id="completedPair"
+                type="checkbox"
+                class="checkbox checkbox-neutral"
+              />
+              <span class="font-medium">Completed pair</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="set-block flex flex-col w-full items-start mt-8"
+        data-set="1"
+        data-max="4"
+      >
+        <h1 class="font-black uppercase text-lg flex items-center">Set 1</h1>
+        <button
+          class="set-container bg-neutral-200 w-full min-h-25 rounded-lg flex justify-center items-center text-3xl shadow-md p-4"
+        >
+          +
+        </button>
+      </div>
+
+      <div
+        class="set-block flex flex-col w-full items-start mt-8"
+        data-set="2"
+        data-max="4"
+      >
+        <h1 class="font-black uppercase text-lg flex items-center">Set 2</h1>
+        <button
+          class="set-container bg-neutral-200 w-full min-h-25 rounded-lg flex justify-center items-center text-3xl shadow-md p-4"
+        >
+          +
+        </button>
+      </div>
+
+      <div
+        class="set-block flex flex-col w-full items-start mt-8"
+        data-set="3"
+        data-max="4"
+      >
+        <h1 class="font-black uppercase text-lg flex items-center">Set 3</h1>
+        <button
+          class="set-container bg-neutral-200 w-full min-h-25 rounded-lg flex justify-center items-center text-3xl shadow-md p-4"
+        >
+          +
+        </button>
+      </div>
+
+      <div
+        class="set-block flex flex-col w-full items-start mt-8"
+        data-set="4"
+        data-max="4"
+      >
+        <h1 class="font-black uppercase text-lg flex items-center">Set 4</h1>
+        <button
+          class="set-container bg-neutral-200 w-full min-h-25 rounded-lg flex justify-center items-center text-3xl shadow-md p-4"
+        >
+          +
+        </button>
+      </div>
+
+      <!-- Pair -->
+      <div
+        class="set-block flex flex-col w-full items-start mt-8"
+        data-set="pair"
+        data-max="2"
+      >
+        <h1 class="font-black uppercase text-lg">Pair</h1>
+        <button
+          class="set-container bg-neutral-200 w-full min-h-25 rounded-lg flex justify-center items-center text-3xl shadow-md p-4"
+        >
+          +
+        </button>
+      </div>
+      <div class="flex flex-col w-full mt-8">
+        <label class="font-black uppercase text-lg mb-2"
+          >Flower / Season Tiles</label
+        >
+
+        <input
+          id="flowerSeasonCount"
+          type="number"
+          min="0"
+          max="8"
+          value="0"
+          class="input input-bordered w-full"
+          placeholder="Enter number of flower/season tiles"
+        />
+      </div>
+      <button
+        id="calculateBtn"
+        class="btn rounded-lg bg-neutral-900 text-base-100 shadow-none border-0 mt-8 w-full h-14"
+      >
+        Calculate
+      </button>
+
+      <div id="resultsScreen" class="hidden w-full mt-8">
+        <div class="flex items-center justify-between">
+          <h2 class="font-black uppercase text-2xl">Score</h2>
+          <button id="backToFormBtn" class="btn btn-sm btn-ghost">Back</button>
+        </div>
+
+        <div id="scoreBreakdown" class="mt-6 flex flex-col gap-4"></div>
+
+        <div class="mt-6 bg-neutral-900 text-base-100 rounded-xl p-5">
+          <p class="uppercase text-sm opacity-70">Final Total</p>
+          <p id="finalScore" class="text-4xl font-black leading-none mt-2">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <dialog id="tileModal" class="modal">
+      <div class="modal-box max-w-md">
+        <div class="flex justify-between items-start gap-4">
+          <div>
+            <h2 id="modalTitle" class="font-black uppercase text-xl">
+              Add Tiles
+            </h2>
+            <p class="text-sm opacity-70">Choose up to 4 tiles for this set.</p>
+            <div class="mt-4">
+              <label class="font-bold text-sm uppercase">Set Type</label>
+              <div class="join w-full mt-2 rounded-lg">
+                <input
+                  class="join-item btn flex-1 checked:bg-neutral-900 border-0"
+                  type="radio"
+                  name="setVisibility"
+                  value="concealed"
+                  aria-label="Concealed"
+                  checked
+                />
+                <input
+                  class="join-item btn flex-1 checked:bg-neutral-900 border-0"
+                  type="radio"
+                  name="setVisibility"
+                  value="exposed"
+                  aria-label="Exposed"
+                />
+              </div>
+            </div>
+          </div>
+
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost">✕</button>
+          </form>
+        </div>
+
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-2">
+            <label class="font-bold text-sm uppercase">Tile</label>
+            <span id="tileCounter" class="badge badge-neutral">0/4</span>
+          </div>
+
+          <input
+            id="tileInput"
+            type="text"
+            placeholder="Type a tile..."
+            class="input input-bordered w-full"
+            autocomplete="off"
+          />
+
+          <div
+            id="suggestions"
+            class="mt-2 bg-base-200 rounded-lg overflow-hidden hidden"
+          ></div>
+        </div>
+
+        <div class="mt-6">
+          <h3 class="font-bold text-sm uppercase mb-2">Added Tiles</h3>
+          <div
+            id="selectedTiles"
+            class="min-h-20 bg-neutral-100 rounded-lg p-3 flex flex-wrap gap-2"
+          ></div>
+        </div>
+
+        <div class="modal-action">
+          <button id="cancelBtn" class="btn btn-ghost">Cancel</button>
+          <button id="submitSetBtn" class="btn btn-neutral">Submit</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      const mahjongTiles = [
+        "1 Bamboo",
+        "2 Bamboo",
+        "3 Bamboo",
+        "4 Bamboo",
+        "5 Bamboo",
+        "6 Bamboo",
+        "7 Bamboo",
+        "8 Bamboo",
+        "9 Bamboo",
+
+        "1 Character",
+        "2 Character",
+        "3 Character",
+        "4 Character",
+        "5 Character",
+        "6 Character",
+        "7 Character",
+        "8 Character",
+        "9 Character",
+
+        "1 Dot",
+        "2 Dot",
+        "3 Dot",
+        "4 Dot",
+        "5 Dot",
+        "6 Dot",
+        "7 Dot",
+        "8 Dot",
+        "9 Dot",
+
+        "East Wind",
+        "South Wind",
+        "West Wind",
+        "North Wind",
+
+        "Red Dragon",
+        "Green Dragon",
+        "White Dragon",
+      ];
+
+      const setData = {
+        1: { tiles: [], visibility: "concealed" },
+        2: { tiles: [], visibility: "concealed" },
+        3: { tiles: [], visibility: "concealed" },
+        4: { tiles: [], visibility: "concealed" },
+        pair: { tiles: [], visibility: "concealed" },
+      };
+
+      let activeSet = null;
+      let activeMax = 4;
+      let modalTiles = [];
+
+      const modal = document.getElementById("tileModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const tileInput = document.getElementById("tileInput");
+      const suggestions = document.getElementById("suggestions");
+      const selectedTiles = document.getElementById("selectedTiles");
+      const tileCounter = document.getElementById("tileCounter");
+      const submitSetBtn = document.getElementById("submitSetBtn");
+      const cancelBtn = document.getElementById("cancelBtn");
+      const visibilityInputs = document.querySelectorAll(
+        'input[name="setVisibility"]',
+      );
+      const yourWindInput = document.getElementById("yourWind");
+      const mahjongCheckbox = document.getElementById("mahjongCheckbox");
+      const winningTileSection = document.getElementById("winningTileSection");
+      const drawnFromWall = document.getElementById("drawnFromWall");
+      const completedPair = document.getElementById("completedPair");
+      const appCard = document.getElementById("appCard");
+      const calculateBtn = document.getElementById("calculateBtn");
+      const resultsScreen = document.getElementById("resultsScreen");
+      const backToFormBtn = document.getElementById("backToFormBtn");
+      const scoreBreakdown = document.getElementById("scoreBreakdown");
+      const finalScore = document.getElementById("finalScore");
+      const flowerSeasonCount = document.getElementById("flowerSeasonCount");
+
+      mahjongCheckbox.addEventListener("change", () => {
+        if (mahjongCheckbox.checked) {
+          winningTileSection.classList.remove("hidden");
+        } else {
+          winningTileSection.classList.add("hidden");
+
+          drawnFromWall.checked = false;
+          completedPair.checked = false;
+        }
+      });
+
+      document.querySelectorAll(".set-container").forEach((container) => {
+        container.addEventListener("click", () => {
+          const setBlock = container.closest(".set-block");
+
+          activeSet = setBlock.dataset.set;
+          activeMax = Number(setBlock.dataset.max);
+
+          modalTiles = [...setData[activeSet].tiles];
+
+          visibilityInputs.forEach((input) => {
+            input.checked = input.value === setData[activeSet].visibility;
+          });
+
+          modalTitle.textContent =
+            activeSet === "pair" ? "Pair" : `Set ${activeSet}`;
+
+          tileInput.value = "";
+          suggestions.classList.add("hidden");
+
+          renderModalTiles();
+
+          modal.showModal();
+
+          setTimeout(() => tileInput.focus(), 50);
+        });
+      });
+
+      tileInput.addEventListener("input", () => {
+        const query = tileInput.value.trim().toLowerCase();
+
+        if (!query) {
+          suggestions.classList.add("hidden");
+          suggestions.innerHTML = "";
+          return;
+        }
+
+        const matches = mahjongTiles
+          .filter((tile) => tile.toLowerCase().includes(query))
+          .slice(0, 8);
+
+        renderSuggestions(matches);
+      });
+
+      function renderSuggestions(matches) {
+        suggestions.innerHTML = "";
+
+        if (matches.length === 0) {
+          suggestions.classList.add("hidden");
+          return;
+        }
+
+        matches.forEach((tile) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = tile;
+          button.className =
+            "w-full text-left px-4 py-2 hover:bg-neutral-300 text-sm";
+
+          button.addEventListener("click", () => {
+            addTile(tile);
+          });
+
+          suggestions.appendChild(button);
+        });
+
+        suggestions.classList.remove("hidden");
+      }
+
+      function addTile(tile) {
+        if (modalTiles.length >= activeMax) return;
+
+        modalTiles.push(tile);
+        tileInput.value = "";
+        suggestions.classList.add("hidden");
+        suggestions.innerHTML = "";
+
+        renderModalTiles();
+      }
+
+      function removeTile(index) {
+        modalTiles.splice(index, 1);
+        renderModalTiles();
+      }
+
+      function renderModalTiles() {
+        selectedTiles.innerHTML = "";
+        tileCounter.textContent = `${modalTiles.length}/${activeMax}`;
+
+        if (modalTiles.length >= activeMax) {
+          tileInput.disabled = true;
+          tileInput.placeholder = `Maximum ${activeMax} tiles added`;
+        } else {
+          tileInput.disabled = false;
+          tileInput.placeholder = "Type a tile...";
+        }
+
+        if (modalTiles.length === 0) {
+          selectedTiles.innerHTML =
+            '<p class="text-sm opacity-50">No tiles added yet.</p>';
+          return;
+        }
+
+        modalTiles.forEach((tile, index) => {
+          const tilePill = document.createElement("div");
+          tilePill.className =
+            "badge badge-lg badge-neutral gap-2 py-4 px-3 font-bold";
+
+          tilePill.innerHTML = `
+            <span>${tile}</span>
+            <button type="button" class="font-black">×</button>
+          `;
+
+          tilePill.querySelector("button").addEventListener("click", () => {
+            removeTile(index);
+          });
+
+          selectedTiles.appendChild(tilePill);
+        });
+      }
+
+      submitSetBtn.addEventListener("click", () => {
+        if (!activeSet) return;
+
+        const selectedVisibility = document.querySelector(
+          'input[name="setVisibility"]:checked',
+        ).value;
+
+        setData[activeSet] = {
+          tiles: [...modalTiles],
+          visibility: selectedVisibility,
+        };
+        renderMainSet(activeSet);
+
+        modal.close();
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        modal.close();
+      });
+
+      function renderMainSet(setNumber) {
+        const setBlock = document.querySelector(
+          `.set-block[data-set="${setNumber}"]`,
+        );
+
+        const title = setBlock.querySelector("h1");
+        const container = setBlock.querySelector(".set-container");
+        const tiles = setData[setNumber].tiles;
+        const visibility = setData[setNumber].visibility;
+
+        title.innerHTML = `
+    ${setNumber === "pair" ? "Pair" : `Set ${setNumber}`}
+    <span class="badge badge-sm badge-outline ml-2 uppercase">
+      ${visibility}
+    </span>
+  `;
+
+        if (tiles.length === 0) {
+          container.innerHTML = "+";
+          container.classList.add("text-3xl");
+          return;
+        }
+
+        container.classList.remove("text-3xl");
+        container.innerHTML = `
+    <div class="flex flex-wrap justify-center gap-2 text-sm">
+      ${tiles
+        .map(
+          (tile) => `
+            <span class="badge badge-neutral badge-lg py-4 font-bold">
+              ${tile}
+            </span>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+      }
+      const SCORING = {
+        sets: {
+          simple: { exposed3: 2, concealed3: 4, exposed4: 8, concealed4: 16 },
+          terminal: {
+            exposed3: 4,
+            concealed3: 8,
+            exposed4: 16,
+            concealed4: 32,
+          },
+          winds: { exposed3: 4, concealed3: 8, exposed4: 16, concealed4: 32 },
+          dragons: { exposed3: 4, concealed3: 8, exposed4: 16, concealed4: 32 },
+          chow: { exposed3: 0, concealed3: 0, exposed4: 0, concealed4: 0 },
+        },
+        pair: {
+          dragons: 2,
+          ownWind: 2,
+          other: 0,
+        },
+        mahjong: {
+          winningHand: 20,
+          drawnFromWall: 2,
+          completedPair: 2,
+        },
+        flowersSeasons: {
+          pointsEach: 4,
+        },
+      };
+
+      calculateBtn.addEventListener("click", () => {
+        renderScoreScreen();
+        showResultsScreen();
+      });
+
+      backToFormBtn.addEventListener("click", () => {
+        showFormScreen();
+      });
+
+      function showResultsScreen() {
+        Array.from(appCard.children).forEach((child) => {
+          if (child.id !== "resultsScreen") {
+            child.classList.add("hidden");
+          }
+        });
+
+        resultsScreen.classList.remove("hidden");
+
+        requestAnimationFrame(() => {
+          finalScore.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        });
+      }
+
+      function showFormScreen() {
+        Array.from(appCard.children).forEach((child) => {
+          if (child.id !== "resultsScreen") {
+            child.classList.remove("hidden");
+          }
+        });
+
+        resultsScreen.classList.add("hidden");
+      }
+
+      function renderScoreScreen() {
+        scoreBreakdown.innerHTML = "";
+        let total = 0;
+
+        ["1", "2", "3", "4"].forEach((setNumber) => {
+          const result = scoreSet(setNumber);
+          total += result.points;
+          scoreBreakdown.appendChild(createScoreCard(result));
+        });
+
+        const pairResult = scorePair();
+        total += pairResult.points;
+        scoreBreakdown.appendChild(createScoreCard(pairResult));
+
+        const flowerSeasonResult = scoreFlowersSeasons();
+        total += flowerSeasonResult.points;
+        scoreBreakdown.appendChild(createScoreCard(flowerSeasonResult));
+
+        const bonusResults = scoreBonuses();
+
+        bonusResults.forEach((bonus) => {
+          total += bonus.points;
+          scoreBreakdown.appendChild(createScoreCard(bonus));
+        });
+
+        finalScore.textContent = total;
+      }
+
+      function scoreFlowersSeasons() {
+        const count = Number(flowerSeasonCount.value) || 0;
+        const points = count * SCORING.flowersSeasons.pointsEach;
+
+        return {
+          title: "Flowers / Seasons",
+          tiles: [],
+          rule: `${count} flower/season tile${count === 1 ? "" : "s"} × 4 points each`,
+          points,
+        };
+      }
+
+      function scoreSet(setNumber) {
+        const set = setData[setNumber];
+        const tiles = set.tiles;
+
+        if (tiles.length === 0) {
+          return {
+            title: `Set ${setNumber}`,
+            tiles,
+            rule: "No tiles added",
+            points: 0,
+          };
+        }
+
+        if (tiles.length < 3) {
+          return {
+            title: `Set ${setNumber}`,
+            tiles,
+            rule: "Incomplete set",
+            points: 0,
+          };
+        }
+
+        const setKind = getSetKind(tiles);
+        const scoreKey = getSetScoreKey(tiles.length, set.visibility);
+
+        const points = SCORING.sets[setKind.type]?.[scoreKey] ?? 0;
+
+        return {
+          title: `Set ${setNumber}`,
+          tiles,
+          rule: setKind.label,
+          detail: set.visibility,
+          points,
+        };
+      }
+
+      function scorePair() {
+        const pair = setData.pair;
+        const tiles = pair.tiles;
+
+        if (tiles.length === 0) {
+          return {
+            title: "Pair",
+            tiles,
+            rule: "No tiles added",
+            points: 0,
+          };
+        }
+
+        if (tiles.length !== 2 || tiles[0] !== tiles[1]) {
+          return {
+            title: "Pair",
+            tiles,
+            rule: "Invalid pair",
+            points: 0,
+          };
+        }
+
+        const tile = parseTile(tiles[0]);
+        const yourWind = yourWindInput.value;
+
+        if (tile.type === "dragon") {
+          return {
+            title: "Pair",
+            tiles,
+            rule: "Pair of dragons",
+            points: SCORING.pair.dragons,
+          };
+        }
+
+        if (tile.type === "wind" && tile.wind === yourWind) {
+          return {
+            title: "Pair",
+            tiles,
+            rule: "Pair of own wind",
+            points: SCORING.pair.ownWind,
+          };
+        }
+
+        return {
+          title: "Pair",
+          tiles,
+          rule: "Any other pair",
+          points: SCORING.pair.other,
+        };
+      }
+
+      function scoreBonuses() {
+        const bonuses = [];
+
+        if (mahjongCheckbox.checked) {
+          bonuses.push({
+            title: "Mahjong",
+            tiles: [],
+            rule: "Mahjongg / winning hand",
+            points: SCORING.mahjong.winningHand,
+          });
+
+          if (drawnFromWall.checked) {
+            bonuses.push({
+              title: "Winning Tile",
+              tiles: [],
+              rule: "Winning tile drawn from wall",
+              points: SCORING.mahjong.drawnFromWall,
+            });
+          }
+
+          if (completedPair.checked) {
+            bonuses.push({
+              title: "Winning Tile",
+              tiles: [],
+              rule: "Tile needed for win completed the pair",
+              points: SCORING.mahjong.completedPair,
+            });
+          }
+        }
+
+        return bonuses;
+      }
+
+      function getSetKind(tiles) {
+        if (isChow(tiles)) {
+          return {
+            type: "chow",
+            label: "Chow / run",
+          };
+        }
+
+        const allSame = tiles.every((tile) => tile === tiles[0]);
+
+        if (!allSame) {
+          return {
+            type: "chow",
+            label: "No matching scoring rule",
+          };
+        }
+
+        const tile = parseTile(tiles[0]);
+
+        if (tile.type === "dragon") {
+          return {
+            type: "dragons",
+            label: `${tiles.length} dragons`,
+          };
+        }
+
+        if (tile.type === "wind") {
+          return {
+            type: "winds",
+            label: `${tiles.length} winds`,
+          };
+        }
+
+        if (tile.number === 1 || tile.number === 9) {
+          return {
+            type: "terminal",
+            label: `${tiles.length} of a kind, 1 or 9`,
+          };
+        }
+
+        return {
+          type: "simple",
+          label: `${tiles.length} of a kind, 2–8`,
+        };
+      }
+
+      function getSetScoreKey(tileCount, visibility) {
+        const exposedOrConcealed =
+          visibility === "concealed" ? "concealed" : "exposed";
+
+        return `${exposedOrConcealed}${tileCount}`;
+      }
+
+      function isChow(tiles) {
+        if (tiles.length !== 3) return false;
+
+        const parsed = tiles.map(parseTile);
+
+        const allSuited = parsed.every((tile) => tile.type === "suit");
+        if (!allSuited) return false;
+
+        const sameSuit = parsed.every((tile) => tile.suit === parsed[0].suit);
+        if (!sameSuit) return false;
+
+        const numbers = parsed.map((tile) => tile.number).sort((a, b) => a - b);
+
+        return numbers[1] === numbers[0] + 1 && numbers[2] === numbers[1] + 1;
+      }
+
+      function parseTile(tileName) {
+        const [firstWord, secondWord] = tileName.split(" ");
+
+        if (["Bamboo", "Character", "Dot"].includes(secondWord)) {
+          return {
+            type: "suit",
+            number: Number(firstWord),
+            suit: secondWord.toLowerCase(),
+          };
+        }
+
+        if (secondWord === "Wind") {
+          return {
+            type: "wind",
+            wind: firstWord.toLowerCase(),
+          };
+        }
+
+        if (secondWord === "Dragon") {
+          return {
+            type: "dragon",
+            dragon: firstWord.toLowerCase(),
+          };
+        }
+
+        return {
+          type: "unknown",
+        };
+      }
+
+      function createScoreCard(result) {
+        const card = document.createElement("div");
+        card.className = "bg-neutral-200 rounded-xl p-4 shadow-md";
+
+        const tileHtml =
+          result.tiles.length > 0
+            ? result.tiles
+                .map(
+                  (tile) => `
+              <span class="badge badge-neutral badge-lg py-4 font-bold">
+                ${tile}
+              </span>
+            `,
+                )
+                .join("")
+            : `<span class="text-sm opacity-60">No tiles</span>`;
+
+        card.innerHTML = `
+    <div class="flex justify-between items-start gap-4">
+      <div>
+        <h3 class="font-black uppercase text-lg">${result.title}</h3>
+        ${
+          result.detail
+            ? `<p class="text-xs uppercase opacity-60">${result.detail}</p>`
+            : ""
+        }
+      </div>
+
+      <div class="text-right">
+        <p class="text-2xl font-black">${result.points}</p>
+        <p class="text-xs uppercase opacity-60">points</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mt-3">
+      ${tileHtml}
+    </div>
+
+    <div class="mt-4 bg-base-100 rounded-lg p-3">
+      <p class="text-xs uppercase opacity-60">Scoring Rule</p>
+      <p class="font-bold">${result.rule}</p>
+    </div>
+  `;
+
+        return card;
+      }
+    </script>
+  </body>
+</html>
